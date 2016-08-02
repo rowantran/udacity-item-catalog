@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit {{item.name}}{% endblock title %}
+
+{% block content %}
+
+<form method="post">
+    <input type="text" name="name" placeholder="Name" value="{{item.name}}">
+    <textarea name="description" placeholder="Description">{{item.description}}</textarea>
+
+    <input type="submit">
+</form>
+
+<a href="{{url_for('catalog')}}">Cancel</a>
+
+{% endblock content %}

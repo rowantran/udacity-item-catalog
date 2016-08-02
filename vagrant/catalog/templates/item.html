@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
+{% endblock head %}
+
+{% block title %}{{item.name}}{% endblock title %}
+
+{% block content %}
+
+<script>
+function deleteItem() {
+    $.post('{{url_for('deleteItem', category_id=item.category_id, item_id=item.id)}}', function(data) {
+        window.location.href = '/';
+    });
+}
+</script>
+
+{% if item %}
+<h1>{{item.name}}</h1>
+{{item.description}}
+{% else %}
+Item does not exist.
+{% endif %}
+
+{% if user == item.user_id %}
+<a href="{{url_for('editItem', category_id=item.category_id, item_id=item.id)}}">Edit</a>
+<a href="#" onclick="deleteItem();">Delete</a>
+{% endif %}
+
+{% endblock content %}

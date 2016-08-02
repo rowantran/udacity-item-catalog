@@ -12,27 +12,25 @@ class User(Base):
     id = Column(Integer, primary_key = True)
     name = Column(String(255), nullable = False)
     email = Column(String(255), nullable = False)
-    picture = Column(String(255))
 
 
-class Restaurant(Base):
-    __tablename__ = 'restaurant'
+class Category(Base):
+    __tablename__ = 'category'
 
     id = Column(Integer, primary_key = True)
     name = Column(String(255), nullable = False)
-    owner = Column(Integer, ForeignKey('user.id'))
+    items = relationship("Item", back_populates = "category")
 
 
-class MenuItem(Base):
+class Item(Base):
     __tablename__ = 'item'
 
     id = Column(Integer, primary_key = True)
     name = Column(String(255), nullable = False)
-    description = Column(String(255))
-    price = Column(String(8))
-    course = Column(String(255))
-    restaurant = Column(Integer, ForeignKey('restaurant.id'))
+    description = Column(String(2048))
+    category_id = Column(Integer, ForeignKey('category.id'))
+    category = relationship("Category", back_populates = "items")
+    user_id = Column(Integer, ForeignKey('user.id'))
 
-
-engine = create_engine('sqlite:///menu.db')
+engine = create_engine('sqlite:///catalog.db')
 Base.metadata.create_all(engine)

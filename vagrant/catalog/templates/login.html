@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Log in{% endblock title %}
+
+{% block head %}
+<script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<meta name="google-signin-client_id" content="875793525089-usfohd6fm8n4qm889om9ninrmp0map9f.apps.googleusercontent.com">
+{% endblock head %}
+
+{% block content %}
+
+<div class="g-signin2" 
+    data-onsuccess="onSignIn"
+    data-onfailure="onSignInFailure">
+</div>
+<div id="result"></div>
+
+<script>
+function onSignIn(googleUser) {
+    $('.g-signin2').attr('style', 'display: none');
+    var id_token = googleUser.getAuthResponse().id_token;
+    $.ajax({
+        type: 'POST',
+        url: '/gconnect/?state={{STATE}}',
+        processData: false,
+        contentType: 'application/octet-stream; charset=utf-8',
+        data: id_token,
+        success: function(result) {
+            if (result) {
+                $('#result').html('Login successful! </br>' + result + '</br> Redirecting...');
+                setTimeout(function() {
+                    window.location.href = '{{url_for('catalog')}}';
+                }, 4000);
+            }
+        }
+    });
+}
+
+function onSignInFailure() {
+    $('#result').html('Failed to log in.');
+}
+</script>
+
+{% endblock content %}
