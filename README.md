@@ -15,5 +15,7 @@ To access the website, simply go to `localhost:5000`.
 
 ### JSON endpoints
 Catalog JSON: `/json`
+
 Category JSON: `/category/<categoryID>/json`
+
 Item JSON: `/category/<categoryID>/<itemID>/json`
