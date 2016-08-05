@@ -2,17 +2,92 @@
 
 {% block title %}New item{% endblock title %}
 
+{% block head %}
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+
+<meta name="google-signin-client_id" content="875793525089-usfohd6fm8n4qm889om9ninrmp0map9f.apps.googleusercontent.com">
+{% endblock head %}
+
 {% block content %}
 
-<form method="post">
-    <input type="text" name="name" placeholder="Name">
-    <textarea name="description" placeholder="Description"></textarea>
-    <select name="category">
-        {% for category in categories %}
-        <option value="{{category.id}}">{{category.name}}</option>
-        {% endfor %}
-    </select>
-    <input type="submit">
-</form>
+<script>
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function() {
+        $.get('/gdisconnect', function(data) {
+            alert("Logged out successfully.")
+        });
+    });
+}
+
+function onLoad() {
+  gapi.load('auth2', function() {
+    gapi.auth2.init();
+  });
+}
+</script>
+
+<div class="container-fluid"> 
+    <nav class="navbar navbar-default">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Item Catalog</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="main-navbar">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                {% if user %}
+                <li class="active"><a href="#">New item</a></li>
+                {% endif %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                                                                                             aria-expanded="false">
+                        Categories <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for category in categories %}
+                        <li><a href="{{url_for('showCategory', category_id=category.id)}}">{{category.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+
+            {% if user %}
+            <button type="button" class="btn btn-default navbar-btn pull-right" onclick="signOut();">Sign out</button>
+            {% else %}
+            <a href="/login/" class="btn btn-default navbar-btn pull-right">Log in</a>
+            {% endif %}
+        </div>
+
+    </nav>
+
+    <h1>New item</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" placeholder="Description"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select class="form-group" id="category" name="category">
+                {% for category in categories %}
+                <option value="{{category.id}}">{{category.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <input type="submit">
+        <a href="{{url_for('catalog')}}">Cancel</a>
+    </form>
+</div>
 
 {% endblock content %}

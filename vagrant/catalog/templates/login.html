@@ -3,7 +3,6 @@
 {% block title %}Log in{% endblock title %}
 
 {% block head %}
-<script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <meta name="google-signin-client_id" content="875793525089-usfohd6fm8n4qm889om9ninrmp0map9f.apps.googleusercontent.com">
@@ -32,7 +31,7 @@ function onSignIn(googleUser) {
                 $('#result').html('Login successful! </br>' + result + '</br> Redirecting...');
                 setTimeout(function() {
                     window.location.href = '{{url_for('catalog')}}';
-                }, 4000);
+                }, 1000);
             }
         }
     });

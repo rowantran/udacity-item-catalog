@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block head %}
-<script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
 <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 
 <meta name="google-signin-client_id" content="875793525089-usfohd6fm8n4qm889om9ninrmp0map9f.apps.googleusercontent.com">
@@ -10,15 +9,6 @@
 {% block title %}Item Catalog{% endblock title %}
 
 {% block content %}
-
-{% if user %}
-Welcome, {{user}}!
-<a href-"#" onclick="signOut();">Sign out</a>
-<a href="/newitem/">New item</a>
-{% else %}
-Not logged in.
-<a href="/login/">Log in</a>
-{% endif %}
 
 <script>
 function signOut() {
@@ -37,7 +27,52 @@ function onLoad() {
 }
 </script>
 
-{% for category in categories %}
-<a href="/category/{{category.id}}">{{category.name}}</a>
-{% endfor %}
+<div class="container-fluid">
+    <nav class="navbar navbar-default">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Item Catalog</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="main-navbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                {% if user %}
+                <li><a href="/newitem">New item</a></li>
+                {% endif %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                                                                                             aria-expanded="false">
+                        Categories <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for category in categories %}
+                        <li><a href="{{url_for('showCategory', category_id=category.id)}}">{{category.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+
+            {% if user %}
+            <button type="button" class="btn btn-default navbar-btn pull-right" onclick="signOut();">Sign out</button>
+            {% else %}
+            <a href="/login/" class="btn btn-default navbar-btn pull-right">Log in</a>
+            {% endif %}
+        </div>
+
+    </nav>
+
+    <h1>Recent Items</h1>
+    {% for item in recentItems %}
+    <h2>{{item.name}}</h2>
+    {{item.description}}
+    {% endfor %}
+</div>
+
 {% endblock content %}
+

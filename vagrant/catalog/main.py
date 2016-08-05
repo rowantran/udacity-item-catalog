@@ -42,7 +42,7 @@ def getUserID(email):
 def itemDict(item):
     # Returns a dictionary representing an item.
     if item:
-        return {"category_id": item.category_id, "item_id": item.id, "name": item.name, "description": item.description}
+        return {"category_id": item.category_id, "created": str(item.created), "item_id": item.id, "name": item.name, "description": item.description}
     else:
         return {}
 
@@ -73,8 +73,9 @@ app = Flask(__name__)
 def catalog():
     user = session.get('username')
     categories = db_session.query(Category).all()
+    recentItems = db_session.query(Item).order_by(Item.created.desc()).limit(5).all()
 
-    return render_template('catalog.html', user = user, categories = categories)
+    return render_template('catalog.html', user = user, categories = categories, recentItems=recentItems)
   
 @app.route('/json/')
 def catalogJSON():
@@ -215,10 +216,11 @@ def gdisconnect():
 @app.route('/newitem/', methods = ['GET', 'POST'])
 def newItem():
     if request.method == 'GET':
+        user = session.get('username')
         if session.get('email'):
             categories = db_session.query(Category).all()
 
-            return render_template('new_item.html', categories = categories)
+            return render_template('new_item.html', categories = categories, user = user)
         else:
             return redirect(url_for('catalog'))
     else:
@@ -227,9 +229,10 @@ def newItem():
         description = request.values.get('description')
         user_id = getUserID(session.get('email'))
 
-        item = Item(name = name, description = description, category_id = category, user_id = user_id)
-        db_session.add(item)
-        db_session.commit()
+        if user_id:
+            item = Item(name = name, description = description, category_id = category, user_id = user_id)
+            db_session.add(item)
+            db_session.commit()
 
         return redirect(url_for('catalog'))
 
