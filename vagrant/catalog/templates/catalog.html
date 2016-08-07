@@ -1,31 +1,8 @@
 {% extends "base.html" %}
 
-{% block head %}
-<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
-
-<meta name="google-signin-client_id" content="875793525089-usfohd6fm8n4qm889om9ninrmp0map9f.apps.googleusercontent.com">
-{% endblock head %}
-
 {% block title %}Item Catalog{% endblock title %}
 
 {% block content %}
-
-<script>
-function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function() {
-        $.get('/gdisconnect', function(data) {
-            alert("Logged out successfully.")
-        });
-    });
-}
-
-function onLoad() {
-  gapi.load('auth2', function() {
-    gapi.auth2.init();
-  });
-}
-</script>
 
 <div class="container-fluid">
     <nav class="navbar navbar-default">

@@ -11,11 +11,30 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+        <meta name="google-signin-client_id" content="875793525089-usfohd6fm8n4qm889om9ninrmp0map9f.apps.googleusercontent.com">
 
         {% block head %}{% endblock head %}
     </head>
 
     <body>
+        <script>
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function() {
+                $.get('/gdisconnect', function(data) {
+                    alert("Logged out successfully.")
+                });
+            });
+        }
+
+        function onLoad() {
+          gapi.load('auth2', function() {
+            gapi.auth2.init();
+          });
+        }
+        </script>
+
         {% block content %}
         {% endblock content %}
     </body>

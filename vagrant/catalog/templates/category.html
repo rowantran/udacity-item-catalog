@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{% if category %}
+{% if category is not none %}
 
 {% for item in category.items %}
 
